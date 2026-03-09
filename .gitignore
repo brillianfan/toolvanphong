@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+build/
+dist/
+poppler-windows/
+*.spec
+.DS_Store
+*.ico
+file_version_info.txt

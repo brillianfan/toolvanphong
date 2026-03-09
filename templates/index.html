@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tool Văn Phòng - Pro Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --primary-hover: #1557b0;
+            --bg: #ffffff;
+            --card-bg: #f8f9fa;
+            --text: #333333;
+            --text-muted: #666666;
+            --border: #e0e0e0;
+            --shadow: 0 4px 6px rgba(0,0,0,0.05);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            margin: 0;
+            background: linear-gradient(45deg, var(--primary), #8ab4f8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        select {
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            outline: none;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        select:focus {
+            border-color: var(--primary);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 30px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 20px rgba(26, 115, 232, 0.1);
+            background-color: #f1f3f5;
+        }
+
+        .card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .card h3 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .card input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .status-bar {
+            position: fixed;
+            bottom: 20px;
+            background: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            color: #1a73e8;
+            font-weight: 600;
+            display: none;
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .processing {
+            animation: pulse 1.5s infinite;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Tool Văn Phòng</h1>
+        <p>Chọn chất lượng và kéo thả tệp vào ô tương ứng để xử lý</p>
+    </header>
+
+    <div class="container">
+        <div class="controls">
+            <select id="quality">
+                <option value="100">Chất lượng: 100%</option>
+                <option value="90">Chất lượng: 90%</option>
+                <option value="85" selected>Chất lượng: 85%</option>
+                <option value="70">Chất lượng: 70%</option>
+                <option value="50">Chất lượng: 50%</option>
+            </select>
+        </div>
+
+        <div class="grid">
+            <div class="card" onclick="document.getElementById('to_pdf').click()">
+                <span class="icon">📑</span>
+                <h3>Nén và chuyển sang PDF</h3>
+                <input type="file" id="to_pdf" multiple onchange="handleUpload(this, 'TO_PDF')">
+            </div>
+            <div class="card">
+                <span class="icon">🖼️</span>
+                <h3>PDF sang Ảnh (JPG)</h3>
+                <input type="file" multiple onchange="handleUpload(this, 'PDF_TO_IMG')">
+            </div>
+            <div class="card">
+                <span class="icon">🌐</span>
+                <h3>Chuyển sang WEBP</h3>
+                <input type="file" multiple onchange="handleUpload(this, 'WEBP')">
+            </div>
+            <div class="card">
+                <span class="icon">🗜️</span>
+                <h3>Nén tệp PDF</h3>
+                <input type="file" multiple onchange="handleUpload(this, 'COMPRESS_PDF')">
+            </div>
+            <div class="card">
+                <span class="icon">📉</span>
+                <h3>Nén và chuyển sang JPEG</h3>
+                <input type="file" multiple onchange="handleUpload(this, 'JPEG')">
+            </div>
+            <div class="card">
+                <span class="icon">📦</span>
+                <h3>Nén và chuyển sang PNG</h3>
+                <input type="file" multiple onchange="handleUpload(this, 'PNG')">
+            </div>
+            <div class="card">
+                <span class="icon">➕</span>
+                <h3>Gộp nhiều PDF</h3>
+                <input type="file" multiple onchange="handleUpload(this, 'MERGE_PDF')">
+            </div>
+            <div class="card">
+                <span class="icon">✂️</span>
+                <h3>Tách 1 PDF thành 1 trang</h3>
+                <input type="file" onchange="handleUpload(this, 'SPLIT_PDF')">
+            </div>
+        </div>
+    </div>
+
+    <div id="status" class="status-bar">🚀 Đang xử lý... vui lòng đợi</div>
+
+    <script>
+        async function handleUpload(input, action) {
+            const files = input.files;
+            if (files.length === 0) return;
+
+            const quality = document.getElementById('quality').value;
+            const statusBar = document.getElementById('status');
+            statusBar.style.display = 'block';
+            input.parentElement.classList.add('processing');
+
+            const formData = new FormData();
+            formData.append('action', action);
+            formData.append('quality', quality);
+            for (let i = 0; i < files.length; i++) {
+                formData.append('files', files[i]);
+            }
+
+            try {
+                const response = await fetch('/process', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    const contentDisposition = response.headers.get('Content-Disposition');
+                    let filename = 'result';
+                    if (contentDisposition && contentDisposition.indexOf('filename=') !== -1) {
+                        filename = contentDisposition.split('filename=')[1].replace(/"/g, '');
+                    }
+                    a.href = url;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    statusBar.innerText = '✅ Thành công!';
+                } else {
+                    const error = await response.json();
+                    alert('Lỗi: ' + error.error);
+                    statusBar.innerText = '❌ Lỗi xử lý';
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Đã xảy ra lỗi kết nối');
+                statusBar.innerText = '❌ Lỗi kết nối';
+            } finally {
+                setTimeout(() => {
+                    statusBar.style.display = 'none';
+                    statusBar.innerText = '🚀 Đang xử lý... vui lòng đợi';
+                    input.parentElement.classList.remove('processing');
+                }, 3000);
+            }
+        }
+    </script>
+</body>
+</html>
