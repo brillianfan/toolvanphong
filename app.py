@@ -105,7 +105,7 @@ def process_file():
             elif action == "PNG":
                 # PNG use compress_level (0-9)
                 cl = max(0, min(9, (100 - quality) // 10))
-                img.save(output, format="PNG", compress_level=cl, optimize=True)
+                img.save(output, format="PNG", compress_level=cl)
                 output.seek(0)
                 return send_file(output, mimetype='image/png', as_attachment=True, download_name='converted.png')
 
