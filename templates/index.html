@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,7 +15,7 @@
             --text: #333333;
             --text-muted: #666666;
             --border: #e0e0e0;
-            --shadow: 0 4px 6px rgba(0,0,0,0.05);
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
             --transition: all 0.3s ease;
         }
 
@@ -130,7 +131,7 @@
             background: white;
             padding: 12px 25px;
             border-radius: 50px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             color: #1a73e8;
             font-weight: 600;
             display: none;
@@ -138,9 +139,17 @@
 
         /* Animations */
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
 
         .processing {
@@ -148,6 +157,7 @@
         }
     </style>
 </head>
+
 <body>
     <header>
         <h1>Tool Văn Phòng</h1>
@@ -216,6 +226,16 @@
             const files = input.files;
             if (files.length === 0) return;
 
+            // Vercel has a 4.5MB limit for Serverless Functions (Hobby plan)
+            const VERCEL_LIMIT = 4.5 * 1024 * 1024;
+            for (let i = 0; i < files.length; i++) {
+                if (files[i].size > VERCEL_LIMIT) {
+                    if (!confirm(`Tệp "${files[i].name}" vượt quá giới hạn 4.5MB của Vercel. Việc xử lý có thể gây lỗi kết nối. Bạn vẫn muốn tiếp tục?`)) {
+                        return;
+                    }
+                }
+            }
+
             const quality = document.getElementById('quality').value;
             const statusBar = document.getElementById('status');
             statusBar.style.display = 'block';
@@ -268,4 +288,5 @@
         }
     </script>
 </body>
+
 </html>
