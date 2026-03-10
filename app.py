@@ -103,12 +103,24 @@ def process_file():
                 return send_file(output, mimetype='image/jpeg', as_attachment=True, download_name='converted.jpg')
             
             elif action == "PNG":
-                # PNG use compress_level (0-9). Level 9 is extremely slow and causes Vercel timeouts.
-                # Cap at 3 for a better balance on serverless environments.
-                cl = max(0, min(3, (100 - quality) // 10))
-                img.save(output, format="PNG", compress_level=cl)
-                output.seek(0)
-                return send_file(output, mimetype='image/png', as_attachment=True, download_name='converted.png')
+                try:
+                    img = Image.open(f)
+                    if img.format != "PNG":
+                        return jsonify({"error": "Uploaded file is not a valid PNG image."}), 400
+
+                    # Validate quality parameter
+                    if not (0 <= quality <= 100):
+                        return jsonify({"error": "Quality parameter must be between 0 and 100."}), 400
+
+                    # PNG use compress_level (0-9). Level 9 is extremely slow and causes Vercel timeouts.
+                    # Cap at 3 for a better balance on serverless environments.
+                    cl = max(0, min(3, (100 - quality) // 10))
+                    output = io.BytesIO()
+                    img.save(output, format="PNG", compress_level=cl)
+                    output.seek(0)
+                    return send_file(output, mimetype='image/png', as_attachment=True, download_name='converted.png')
+                except Exception as e:
+                    return jsonify({"error": f"Failed to process PNG image: {str(e)}"}), 500
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
