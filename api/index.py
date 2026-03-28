@@ -12,7 +12,7 @@ import pillow_heif
 # Register HEIC opener
 pillow_heif.register_heif_opener()
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='../templates')
 app.config['UPLOAD_FOLDER'] = '/tmp'
 app.config['MAX_CONTENT_LENGTH'] = 32 * 1024 * 1024  # 32MB limit for server processing
 
