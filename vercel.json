@@ -3,11 +3,11 @@
   "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "app.py"
+      "destination": "api/index"
     }
   ],
   "functions": {
-    "app.py": {
+    "api/index.py": {
       "memory": 1024,
       "maxDuration": 60
     }
