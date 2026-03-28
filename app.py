@@ -14,7 +14,7 @@ try:
 except ImportError:
     pillow_heif = None
 
-app = Flask(__name__, template_folder='../templates')
+app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = '/tmp'
 app.config['MAX_CONTENT_LENGTH'] = 32 * 1024 * 1024  # 32MB limit for server processing
 
