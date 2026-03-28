@@ -6,9 +6,13 @@ import tkinter as tk
 from tkinter import messagebox
 from tkinterdnd2 import DND_FILES, TkinterDnD
 from PIL import Image
-import pillow_heif
-# Đăng ký opener để Pillow có thể đọc được file HEIC
-pillow_heif.register_heif_opener()
+try:
+    import pillow_heif
+    # Đăng ký opener để Pillow có thể đọc được file HEIC
+    pillow_heif.register_heif_opener()
+except ImportError:
+    # pillow_heif không khả dụng, ứng dụng vẫn có thể chạy
+    pass
 from pdf2image import convert_from_path
 from pypdf import PdfReader, PdfWriter
 
