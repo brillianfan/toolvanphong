@@ -1,0 +1,26 @@
+# Vercel Ignore File
+# Desktop-specific resources
+poppler-windows/
+Tool-van-phong.py
+Tool-van-phong.spec
+app_icon.ico
+file_version_info.txt
+
+# Local Build artifacts
+build/
+dist/
+
+# Virtual Environment
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Git and other configs
+.git/
+.gitignore
+.vscode/
+.idea/
