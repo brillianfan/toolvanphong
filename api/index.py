@@ -7,10 +7,12 @@ from werkzeug.utils import secure_filename
 import fitz  # PyMuPDF
 from pypdf import PdfReader, PdfWriter
 from PIL import Image
-import pillow_heif
-
-# Register HEIC opener
-pillow_heif.register_heif_opener()
+try:
+    import pillow_heif
+    # Register HEIC opener
+    pillow_heif.register_heif_opener()
+except ImportError:
+    pillow_heif = None
 
 app = Flask(__name__, template_folder='../templates')
 app.config['UPLOAD_FOLDER'] = '/tmp'
